@@ -20,7 +20,7 @@ export interface Budget {
 
 export default function BudgetForm() {
   const { user } = useKindeBrowserClient();
-  console.log(user)
+
   // const [isActive, setIsActive] = useState(false);
   const [formData, setFormData] = useState<Budget>({
     userID: "brandon",
@@ -72,34 +72,12 @@ export default function BudgetForm() {
     }
   }, [user])
 
-  useEffect(() => {
-    const getBudgets = async () => {
-      try {
-        const res = await fetch(`http://localhost:4000/getBudgets?`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-        
-          },
-          body: JSON.stringify({id: user?.id})
-        })
-        if (!res.ok) {
-          throw new Error("error: unable to fetch budgets")
-        }
-        const parsed = await res.json()
-        console.log(parsed)
-      } catch (err) {
-        console.error(err);
-      }
-     
-    }
-    getBudgets()
-  }, [user])
+  
   return (
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <button className="bg-blue-600 px-4 py-2  text-white rounded-md">
+          <button className="bg-blue-600 px-3 py-1  text-sm text-white rounded-md">
             add a budget
           </button>
         </DialogTrigger>

@@ -6,12 +6,12 @@ interface Props {
 
 export default function DashboardLayout({ children }: Props) {
   return (
-    <div className="flex">
-      <div>
+    <div className="flex w-screen h-screen ">
+      <div className="  ">
         <Sidebar />
       </div>
 
-      <div>{children}</div>
+      <div className=" h-full w-full">{children}</div>
     </div>
   );
 }
