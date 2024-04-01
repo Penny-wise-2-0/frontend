@@ -1,5 +1,6 @@
 "use client";
-import { useState, ChangeEvent, useEffect, useRef } from "react";
+import { useState, ChangeEvent, useEffect, useRef, ReactNode } from "react";
+import { Budget } from "@/app/state/useBudgets";
 import {
   Dialog,
   DialogFooter,
@@ -14,27 +15,37 @@ import { Button } from "@/components/ui/button";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useBudgets } from "@/app/state/useBudgets";
 import ClipLoader from "react-spinners/ClipLoader";
-export interface Budget {
-  userID: string;
+export interface BudgetUpdates {
   frequency: string;
   category: string;
   name: string;
   amount: string;
 }
-
-export default function BudgetForm() {
-  const { user } = useKindeBrowserClient();
+interface Props {
+  budget: Budget;
+  open: boolean;
+  setOpen: (bool: boolean) => void;
+}
+export default function UpdateForm({ budget, open, setOpen }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isValidated, setIsValidated] = useState(false);
   const { refetchBudgets, isLoading, setIsLoading } = useBudgets();
-  const [formData, setFormData] = useState<Budget>({
-    userID: "",
+  const [formData, setFormData] = useState<BudgetUpdates>({
     frequency: "",
     category: "",
     name: "",
     amount: "",
   });
-
+  useEffect(() => {
+    if (budget) {
+      setFormData({
+        frequency: budget.frequency,
+        category: budget.category,
+        name: budget.name,
+        amount: budget.amount,
+      });
+    }
+  }, [budget]);
   const adjustFormData = (name: string, value: string) => {
     setFormData((formData) => ({
       ...formData,
@@ -55,17 +66,22 @@ export default function BudgetForm() {
     try {
       console.log(formData);
       const res = await fetch(`http://localhost:4000/budgets`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...budget,
+          frequency: formData.frequency,
+          category: formData.category,
+          name: formData.name,
+          amount: formData.amount,
+        }),
       });
       console.log(res);
       await refetchBudgets();
       setIsLoading(false);
       setFormData((formData) => ({
-        userID: user!.id,
         frequency: "",
         category: "",
         name: "",
@@ -78,30 +94,14 @@ export default function BudgetForm() {
   };
 
   useEffect(() => {
-    if (user?.id) {
-      setFormData((currentFormData) => ({
-        ...currentFormData,
-        userID: user.id,
-      }));
-    }
-  }, [user]);
-
-  useEffect(() => {
     if (formRef.current && formRef.current.checkValidity()) {
-      setIsValidated((isValidated) => true);
-    } else {
-      setIsValidated((() => false))
+      setIsValidated((isValidated) => !isValidated);
     }
   }, [formData]);
-  if (!user) return;
+
   return (
     <div className="">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="bg-blue-600" size={"sm"}>
-            Add a budget
-          </Button>
-        </DialogTrigger>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit">
           <form
             ref={formRef}
@@ -109,7 +109,7 @@ export default function BudgetForm() {
             aria-label="Add Budget Form"
             onSubmit={handleSubmit}>
             <DialogHeader className=" mb-5 ">
-              <DialogTitle>add a budget</DialogTitle>
+              <DialogTitle>Update Budget</DialogTitle>
             </DialogHeader>
             <label htmlFor="frequency"></label>
             <select
@@ -172,18 +172,16 @@ export default function BudgetForm() {
               required
             />
             {isValidated && (
-              <DialogPrimitive.Close className="flex items-center flex-col w-full">
-                <DialogFooter>
-                  <Button size={"sm"}>Add Budget</Button>
-                </DialogFooter>
-              </DialogPrimitive.Close>
+              <DialogFooter>
+                <DialogPrimitive.Close className="flex items-center flex-col w-full">
+                  <Button size={"sm"}>Update Budget</Button>
+                </DialogPrimitive.Close>
+              </DialogFooter>
             )}
             {!isValidated && (
-            
               <DialogFooter>
-                <Button size={"sm"}>Add Budget</Button>
+                <Button size={"sm"}>Update Budget</Button>
               </DialogFooter>
-            
             )}
           </form>
         </DialogContent>

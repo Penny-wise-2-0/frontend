@@ -2,16 +2,16 @@ import { create } from "zustand";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/dist/types";
 export interface Budget {
-    ID: number;
-    CreatedAt: Date;
-    UpdatedAt: Date;
-    DeletedAt: Date;
-    UserId: string;
-    Frequency: string;
-    Category: string;
-    Name: string;
-    Amount: string;
-  }
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  userId: string;
+  frequency: string;
+  category: string;
+  name: string;
+  amount: string;
+}
 interface BudgetStore {
   budgets: null | Array<Budget>;
   user: KindeUser | null;
@@ -21,8 +21,9 @@ interface BudgetStore {
   setBudgets: (newAgents: Array<Budget>) => void;
   refetchBudgets: () => Promise<void>;
   fetchBudgets: () => Promise<void>;
+  handleDelete: (id: string) => Promise<void>;
 }
-export const useBudget = create<BudgetStore>((set, get) => ({
+export const useBudgets = create<BudgetStore>((set, get) => ({
   user: null,
   setUser: (newUser: any) => set({ user: newUser }),
   budgets: null,
@@ -46,7 +47,8 @@ export const useBudget = create<BudgetStore>((set, get) => ({
       const parsed = await res.json();
       console.log(parsed);
       set({ budgets: parsed });
-      localStorage.setItem("budgets", parsed);
+      console.log(get().budgets);
+      localStorage.setItem("budgets", JSON.stringify(get().budgets));
     } catch (err) {
       console.error(err);
     }
@@ -61,7 +63,31 @@ export const useBudget = create<BudgetStore>((set, get) => ({
     } else {
       await refetchBudgets();
       const updatedBudgets = get().budgets;
+      console.log(updatedBudgets);
       localStorage.setItem("budgets", JSON.stringify(updatedBudgets));
+    }
+  },
+  handleDelete: async (ID: string) => {
+    const { setIsLoading, refetchBudgets } = get();
+    setIsLoading(true);
+    try {
+      const res = await fetch("http://localhost:4000/budgets", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: ID }),
+      });
+      if (!res.ok) {
+        console.log(res);
+        throw new Error("unable to delete budget");
+      }
+      console.log(res);
+      await refetchBudgets();
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
     }
   },
 }));
