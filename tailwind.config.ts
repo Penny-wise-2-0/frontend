@@ -15,9 +15,13 @@ const config = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        
       },
     },
     extend: {
+      screens: {
+        "xs": "450px"
+      },
       colors: {
         "dash-gray": "#49586D",
         "custom-white": "#F8F9FD",

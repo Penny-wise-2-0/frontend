@@ -54,16 +54,16 @@ export default function BudgetTable() {
     return;
   }
   return (
-    <div className=" ">
+    <div className="">
       <UpdateForm
         budget={budgetToUpdate!}
         open={open}
         setOpen={setOpen}></UpdateForm>
-      <Table className="w-[0px]">
+      <Table className="">
         <TableCaption>A list of your budgets.</TableCaption>
-        <TableHeader>
+        <TableHeader className="text-[12px] xs:text-base">
           <TableRow>
-            <TableHead className="w-[100px]">Name</TableHead>
+            <TableHead className="">Name</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Frequency</TableHead>
             <TableHead className="text-right">Amount</TableHead>
@@ -73,15 +73,17 @@ export default function BudgetTable() {
           {budgets?.map((budget: Budget) => {
             return (
               <>
-                <TableRow key={budget.id}>
-                  <TableCell className="font-medium">{budget.name}</TableCell>
+                <TableRow
+                  className="font-medium text-[11px]  xs:text-base "
+                  key={budget.id}>
+                  <TableCell className="">{budget.name}</TableCell>
                   <TableCell>{budget.category}</TableCell>
                   <TableCell>{budget.frequency}</TableCell>
                   <TableCell>{budget.amount}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
-                        <X></X>
+                        <X className="w-4 sm:w-6"></X>
                       </DropdownMenuTrigger>{" "}
                       <DropdownMenuContent className="w-56 z-10">
                         <DropdownMenuLabel>Options</DropdownMenuLabel>

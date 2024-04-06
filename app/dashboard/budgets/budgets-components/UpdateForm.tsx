@@ -142,11 +142,12 @@ export default function UpdateForm({ budget, open, setOpen }: Props) {
               <option value="savings&investments">Savings / Investments</option>
               <option value="housing">Housing </option>
               <option value="food">Food</option>
+              <option value="health">Health</option>
               <option value="shopping">Shopping</option>
               <option value="entertainment">Entertainment</option>
               <option value="transportation">Transportation</option>
               <option value="education">Education</option>
-              <option value="miscellaneous">Miscellaneous</option>
+              <option value="other">Other</option>
             </select>
             <label htmlFor="name"></label>
             <input

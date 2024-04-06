@@ -34,7 +34,7 @@ export const useBudgets = create<BudgetStore>((set, get) => ({
   },
   refetchBudgets: async () => {
     try {
-      const res = await fetch(`http://localhost:4000/getBudgets?`, {
+      const res = await fetch(`http://localhost:4000/budgets/get`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

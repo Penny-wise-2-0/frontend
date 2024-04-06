@@ -2,6 +2,7 @@ import BudgetForm from "./budgets-components/BudgetForm";
 import BudgetTable from "./budgets-components/BudgetTable";
 import { Button } from "@/components/ui/button";
 export default async function Budgets() {
+  
   return (
     <div className="h-full">
       <div className="flex items-center">
