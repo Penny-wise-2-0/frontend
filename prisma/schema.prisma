@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model budgets {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+  user_id    String?
+  frequency  String?
+  category   String?
+  name       String?
+  amount     String?
+
+  @@index([deleted_at], map: "idx_budgets_deleted_at")
+}
+
+model cursors {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+  user_id    String?
+  cursor     String?
+
+  @@index([deleted_at], map: "idx_cursors_deleted_at")
+}
+
+model plaid_access_tokens {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+  user_id    String?
+  token      String?
+  item_id    String?
+
+  @@index([deleted_at], map: "idx_plaid_access_tokens_deleted_at")
+}
+
+model transactions {
+  id                BigInt    @id @default(autoincrement())
+  created_at        DateTime? @db.Timestamptz(6)
+  updated_at        DateTime? @db.Timestamptz(6)
+  deleted_at        DateTime? @db.Timestamptz(6)
+  user_id           String?
+  account_id        String?
+  amount            Decimal?  @db.Decimal
+  category          Json?
+  date              String?
+  name              String?
+  merchant_name     String?
+  payment_channel   String?
+  pending           Boolean?
+  transaction_id    String?
+  transaction_type  String?
+  iso_currency_code String?
+  location          Json?
+  address           String?
+  city              String?
+
+  @@index([deleted_at], map: "idx_transactions_deleted_at")
+}

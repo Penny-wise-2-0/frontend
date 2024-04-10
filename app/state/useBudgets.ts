@@ -34,7 +34,7 @@ export const useBudgets = create<BudgetStore>((set, get) => ({
   },
   refetchBudgets: async () => {
     try {
-      const res = await fetch(`http://localhost:4000/budgets/get`, {
+      const res = await fetch(`http://localhost:3000/api/gateway/budgets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const useBudgets = create<BudgetStore>((set, get) => ({
     const { setIsLoading, refetchBudgets } = get();
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/budgets", {
+      const res = await fetch("http://localhost:3000/api/gateway/budgets", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

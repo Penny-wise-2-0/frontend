@@ -5,10 +5,12 @@ import {
   PlaidLinkError,
 } from "react-plaid-link";
 import { usePlaidLink } from "react-plaid-link";
-import { use, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { metadata } from "@/app/layout";
+
+
+
 export default function PlaidLink() {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -17,9 +19,7 @@ export default function PlaidLink() {
     if (!user) return;
     const fetchLinkToken = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:4000/plaid-link/link-token/${user.id}`
-        );
+        const res = await fetch(`/api/gateway/plaid/link-token/${user.id}`);
         if (!res.ok) {
           console.error(res);
           throw new Error("Unable to fetch link token");
@@ -70,10 +70,11 @@ export default function PlaidLink() {
 
   const { open, ready, error } = usePlaidLink(config);
   console.log(linkToken);
-  console.log(accessToken);
+  console.log("error:", error)
+
   return (
-    <div className="">
-      <Button onClick={() => open()} disabled={!ready}>
+    <div className="" >
+      <Button  onClick={() => open()} disabled={!ready}>
         Connect a bank account
       </Button>
     </div>

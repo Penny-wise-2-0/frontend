@@ -1,7 +1,7 @@
 import BudgetForm from "./budgets-components/BudgetForm";
 import BudgetTable from "./budgets-components/BudgetTable";
 import { Button } from "@/components/ui/button";
-export default async function Budgets() {
+export default function Budgets() {
   
   return (
     <div className="h-full">

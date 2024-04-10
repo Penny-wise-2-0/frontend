@@ -13,7 +13,10 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useBudgets } from "@/app/state/useBudgets";
+import aos from "aos";
+import 'aos/dist/aos.css';
 import ClipLoader from "react-spinners/ClipLoader";
+
 export interface Budget {
   userID: string;
   frequency: string;
@@ -34,7 +37,7 @@ export default function BudgetForm() {
     name: "",
     amount: "",
   });
-
+  aos.init()
   const adjustFormData = (name: string, value: string) => {
     setFormData((formData) => ({
       ...formData,
@@ -78,6 +81,7 @@ export default function BudgetForm() {
   };
 
   useEffect(() => {
+    
     if (user?.id) {
       setFormData((currentFormData) => ({
         ...currentFormData,
@@ -90,12 +94,13 @@ export default function BudgetForm() {
     if (formRef.current && formRef.current.checkValidity()) {
       setIsValidated((isValidated) => true);
     } else {
-      setIsValidated((() => false))
+      setIsValidated(() => false);
     }
   }, [formData]);
   if (!user) return;
+
   return (
-    <div className="">
+    <div data-aos="flip-left" className="">
       <Dialog>
         <DialogTrigger asChild>
           <Button className="bg-blue-600" size={"sm"}>
@@ -180,11 +185,9 @@ export default function BudgetForm() {
               </DialogPrimitive.Close>
             )}
             {!isValidated && (
-            
               <DialogFooter>
                 <Button size={"sm"}>Add Budget</Button>
               </DialogFooter>
-            
             )}
           </form>
         </DialogContent>

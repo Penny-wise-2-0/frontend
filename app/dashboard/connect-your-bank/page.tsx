@@ -1,3 +1,4 @@
+"use client"
 import PlaidConnect from "./PlaidConnect";
 
 export default function LinkYourBank() {

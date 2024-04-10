@@ -65,7 +65,7 @@ export default function UpdateForm({ budget, open, setOpen }: Props) {
     setIsLoading(true);
     try {
       console.log(formData);
-      const res = await fetch(`http://localhost:4000/budgets`, {
+      const res = await fetch(`/api/gateway/budgets`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
